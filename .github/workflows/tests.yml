@@ -17,6 +17,7 @@ jobs:
       NODE_ENV: test
       NODE_OPTIONS: --experimental-vm-modules
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/acquisitions_test
+      ARCJET_KEY: ajkey_test_dummy
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

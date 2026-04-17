@@ -10,7 +10,9 @@ if (!DATABASE_URL) {
 }
 
 const postgresOptions =
-  DATABASE_SSL_REJECT_UNAUTHORIZED === 'false' ? { ssl: { rejectUnauthorized: false } } : {};
+  DATABASE_SSL_REJECT_UNAUTHORIZED === 'false'
+    ? { ssl: { rejectUnauthorized: false } }
+    : {};
 
 const client = postgres(DATABASE_URL, postgresOptions);
 const db = drizzle(client);

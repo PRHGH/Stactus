@@ -31,7 +31,12 @@ export const signup = async (req, res, next) => {
     logger.info(`User registered successfully: ${email}`);
     res.status(201).json({
       message: 'User registered',
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     logger.error('Sign-up error', error);
@@ -70,12 +75,20 @@ export const signIn = async (req, res, next) => {
     logger.info(`User signed in successfully: ${email}`);
     res.status(200).json({
       message: 'User signed in',
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     logger.error('Sign-in error', error);
 
-    if (error.message === 'User not found' || error.message === 'Invalid password') {
+    if (
+      error.message === 'User not found' ||
+      error.message === 'Invalid password'
+    ) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 

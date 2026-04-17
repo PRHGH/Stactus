@@ -80,11 +80,15 @@ export const updateUser = async (req, res, next) => {
     const isOwnAccount = Number(req.user.id) === id;
 
     if (!isAdmin && !isOwnAccount) {
-      return res.status(403).json({ error: 'You can only update your own account' });
+      return res
+        .status(403)
+        .json({ error: 'You can only update your own account' });
     }
 
     if (!isAdmin && updates.role) {
-      return res.status(403).json({ error: 'Only admin users can update roles' });
+      return res
+        .status(403)
+        .json({ error: 'Only admin users can update roles' });
     }
 
     const user = await updateUserService(id, updates);
@@ -125,7 +129,9 @@ export const deleteUser = async (req, res, next) => {
     const isOwnAccount = Number(req.user.id) === id;
 
     if (!isAdmin && !isOwnAccount) {
-      return res.status(403).json({ error: 'You can only delete your own account' });
+      return res
+        .status(403)
+        .json({ error: 'You can only delete your own account' });
     }
 
     await deleteUserService(id);

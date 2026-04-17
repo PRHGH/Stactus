@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import authRoutes from '#routes/auth.routes';
 import usersRoutes from '#routes/users.routes';
 import securityMiddleware from '#middleware/security.middleware';
-import { users } from '#models/user.model';
 
 const app = express();
 
@@ -31,18 +30,22 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString(), uptime: process.uptime() });
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 app.get('/api', (req, res) => {
-  res.status(200).json({ message: 'Acquisition API is running!'  });
+  res.status(200).json({ message: 'Acquisition API is running!' });
 });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route Not Found' });  
+  res.status(404).json({ error: 'Route Not Found' });
 });
 
 export default app;

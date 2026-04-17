@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.8% </span>
+                <span class="strong">11.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/144</span>
+                <span class='fraction'>17/150</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.8% </span>
+                <span class="strong">11.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/144</span>
+                <span class='fraction'>17/150</span>
             </div>
         
             
@@ -207,7 +207,13 @@
 <a name='L142'></a><a href='#L142'>142</a>
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -313,8 +319,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -433,11 +445,15 @@ export const updateUser = <span class="fstat-no" title="function not covered" >a
 <span class="cstat-no" title="statement not covered" >    const isOwnAccount = Number(req.user.id) === id;</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (!isAdmin &amp;&amp; !isOwnAccount) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(403).json({ error: 'You can only update your own account' });</span>
+<span class="cstat-no" title="statement not covered" >      return res</span>
+<span class="cstat-no" title="statement not covered" >        .status(403)</span>
+<span class="cstat-no" title="statement not covered" >        .json({ error: 'You can only update your own account' });</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (!isAdmin &amp;&amp; updates.role) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(403).json({ error: 'Only admin users can update roles' });</span>
+<span class="cstat-no" title="statement not covered" >      return res</span>
+<span class="cstat-no" title="statement not covered" >        .status(403)</span>
+<span class="cstat-no" title="statement not covered" >        .json({ error: 'Only admin users can update roles' });</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const user = await updateUserService(id, updates);</span>
@@ -478,7 +494,9 @@ export const deleteUser = <span class="fstat-no" title="function not covered" >a
 <span class="cstat-no" title="statement not covered" >    const isOwnAccount = Number(req.user.id) === id;</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (!isAdmin &amp;&amp; !isOwnAccount) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(403).json({ error: 'You can only delete your own account' });</span>
+<span class="cstat-no" title="statement not covered" >      return res</span>
+<span class="cstat-no" title="statement not covered" >        .status(403)</span>
+<span class="cstat-no" title="statement not covered" >        .json({ error: 'You can only delete your own account' });</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    await deleteUserService(id);</span>
@@ -502,7 +520,7 @@ export const deleteUser = <span class="fstat-no" title="function not covered" >a
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-17T20:04:26.847Z
+                at 2026-04-17T20:36:10.536Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

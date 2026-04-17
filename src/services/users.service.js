@@ -23,7 +23,11 @@ export const getAllUsers = async () => {
 
 export const getUserById = async id => {
   try {
-    const [user] = await db.select(userFields).from(users).where(eq(users.id, id)).limit(1);
+    const [user] = await db
+      .select(userFields)
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
     return user;
   } catch (error) {
     logger.error(`Error fetching user by id ${id}:`, error);
@@ -60,7 +64,10 @@ export const deleteUser = async id => {
       throw new Error('User not found');
     }
 
-    const [deletedUser] = await db.delete(users).where(eq(users.id, id)).returning(userFields);
+    const [deletedUser] = await db
+      .delete(users)
+      .where(eq(users.id, id))
+      .returning(userFields);
     return deletedUser;
   } catch (error) {
     logger.error(`Error deleting user ${id}:`, error);

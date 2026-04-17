@@ -6,7 +6,7 @@ services:
     env_file:
       - .env.development
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   app:
     build:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - neon-local
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - app_node_modules:/app/node_modules
