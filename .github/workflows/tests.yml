@@ -15,9 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
-      NODE_OPTIONS: --experimental-vm-modules
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/acquisitions_test
       ARCJET_KEY: ajkey_test_dummy
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: acquisitions_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,6 +43,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run database migrations
+        run: npm run db:migrate
 
       - name: Run tests with coverage
         id: run_tests
