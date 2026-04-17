@@ -1,0 +1,14 @@
+# Neon serverless Postgres runs in Neon Cloud; only the app container is deployed here.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: acquisitions-app-prod
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    ports:
+      - "3000:3000"
+    command: node src/index.js
