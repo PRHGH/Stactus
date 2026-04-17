@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { db } from '#config/database';
 import { users } from '#models/user.model';
+import { jwttoken } from '#utils/jwt';
+
 const SALT_ROUNDS = 10;
 
 export const hashPassword = async password => {
@@ -87,4 +89,38 @@ export const authenticateUser = async ({ email, password }) => {
     logger.error(`Error authenticating user: ${e}`);
     throw e;
   }
+};
+
+export const authenticateToken = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const bearerToken =
+      authHeader && authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7)
+        : null;
+    const token = req.cookies?.token || bearerToken;
+
+    if (!token) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const decoded = jwttoken.verify(token);
+    req.user = decoded;
+    return next();
+  } catch (error) {
+    logger.error('Token authentication failed', error);
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+};
+
+export const requireRole = roles => (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  if (!roles.includes(req.user.role)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  return next();
 };
