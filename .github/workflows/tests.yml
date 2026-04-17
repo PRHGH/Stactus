@@ -1,0 +1,119 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      NODE_OPTIONS: --experimental-vm-modules
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/acquisitions_test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        id: run_tests
+        shell: bash
+        run: |
+          set +e
+          npm test -- --coverage --ci --json --outputFile=test-results.json 2>&1 | tee test-output.log
+          test_exit=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$test_exit" >> "$GITHUB_OUTPUT"
+          if [ "$test_exit" -ne 0 ]; then
+            echo "::error title=Test suite failed::One or more tests failed. Run 'npm test' locally to debug."
+          fi
+          exit "$test_exit"
+
+      - name: Annotate failed tests
+        if: always()
+        shell: bash
+        run: |
+          if [ -f test-results.json ]; then
+            node <<'NODE'
+            const fs = require('fs');
+            const payload = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+            const sanitize = message =>
+              String(message)
+                .replace(/%/g, '%25')
+                .replace(/\r/g, '')
+                .replace(/\n/g, '%0A');
+            for (const suite of payload.testResults || []) {
+              if (suite.status !== 'failed') continue;
+              for (const assertion of suite.assertionResults || []) {
+                if (assertion.status !== 'failed') continue;
+                const firstMessage = (assertion.failureMessages || ['See test logs for details.'])[0];
+                const title = `${suite.name} :: ${assertion.fullName || assertion.title}`;
+                console.log(`::error title=${sanitize(title)}::${sanitize(firstMessage)}`);
+              }
+            }
+            NODE
+          fi
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Add test summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Test Results"
+            if [ -f test-results.json ]; then
+              node <<'NODE'
+              const fs = require('fs');
+              const result = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+              console.log(`- Total test suites: ${result.numTotalTestSuites}`);
+              console.log(`- Passed test suites: ${result.numPassedTestSuites}`);
+              console.log(`- Failed test suites: ${result.numFailedTestSuites}`);
+              console.log(`- Total tests: ${result.numTotalTests}`);
+              console.log(`- Passed tests: ${result.numPassedTests}`);
+              console.log(`- Failed tests: ${result.numFailedTests}`);
+              NODE
+            else
+              echo "- test-results.json was not generated."
+            fi
+            if [ -f coverage/coverage-summary.json ]; then
+              echo ""
+              echo "## Coverage Summary"
+              node <<'NODE'
+              const fs = require('fs');
+              const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+              const total = coverage.total || {};
+              for (const [metric, data] of Object.entries(total)) {
+                if (typeof data?.pct === 'number') {
+                  console.log(`- ${metric}: ${data.pct}%`);
+                }
+              }
+              NODE
+            else
+              echo ""
+              echo "## Coverage Summary"
+              echo "- coverage/coverage-summary.json was not generated."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
