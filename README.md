@@ -1,4 +1,4 @@
-# Acquisitions API
+# Stactus
 
 A secure Express.js REST API for user authentication and user management, built as a self-study backend project.
 
@@ -56,8 +56,8 @@ I built this project to practice designing a layered backend architecture, imple
 ### Local setup
 
 ```bash
-git clone https://github.com/PRHGH/acquisitions.git
-cd acquisitions
+git clone https://github.com/PRHGH/stactus.git
+cd stactus
 npm ci
 ```
 
@@ -147,7 +147,7 @@ curl -X POST http://localhost:3000/api/auth/sign-up \
 ## 7. Project Structure
 
 ```text
-acquisitions/
+stactus/
 |-- src/
 |   |-- app.js
 |   |-- index.js
