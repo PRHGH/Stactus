@@ -2,7 +2,7 @@ import 'dotenv/config';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 
-const { DATABASE_URL, DATABASE_SSL_REJECT_UNAUTHORIZED } = process.env;
+const { DATABASE_URL, DATABASE_SSL_REJECT_UNAUTHORIZED } = process.env
 
 if (!DATABASE_URL) {
   console.error('DATABASE_URL is not set in environment variables');
