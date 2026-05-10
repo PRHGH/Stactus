@@ -4,3 +4,4 @@ node_modules/
 *.log
 logs/
 .neon_local/
+.PROJECT_EXPLANATION.md
